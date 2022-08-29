@@ -1,0 +1,39 @@
+1. Store
+2. Vue Router
+3. Component
+
+
+Có header
+    Trang Chủ
+    Profile
+    Thay đổi pass
+    User
+    Dang Anh
+    Bai Viet Chi Tiet
+
+Không có header 
+    Đăng nhập
+    Đăng ký
+
+
+=========================================
+
+1. Cách import bootstrap đúng phiên bản
+    yarn add bootstrap@4.0.0
+    npm install bootstrap@4.0.0
+
+2. Vị trí đặt file style.css
+
+3. Điều chỉnh lại toàn bộ background url trong style.css 
+
+3. Nested Router
+
+=========================================
+
+Token-based Authentication
+    - Json Web Tokens
+    - A Front End Auth Solution
+    (Vue Router - VueX - Axios)
+
+    1. API Private
+    2. API Public
