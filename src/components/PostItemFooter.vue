@@ -18,7 +18,6 @@ export default {
   },
   computed: {
     commentCount() {
-      console.log(this.post.count);
       if (this.post.count) return this.post.count;
       return 0;
     }

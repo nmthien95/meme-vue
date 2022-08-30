@@ -2,12 +2,8 @@
   <div class="ass1-section__list">
     <post-item v-for="item in getListPost" :key="item.PID" :post="item" />
 
-    <button
-      v-on:click="handleLoadMore"
-      v-if="getListPost && getListPost.length"
-      class="load-more ass1-btn"
-    >
-      <span>Xem thêm</span>
+    <button v-if="getListPost && getListPost.length" class="load-more ass1-btn">
+      <span @click="handleLoadMore">Xem thêm</span>
     </button>
     <h3 v-else>Danh sách rỗng</h3>
   </div>
@@ -41,12 +37,13 @@ export default {
   methods: {
     ...mapActions(["getListPostHasPaging"]),
     handleLoadMore() {
-      this.currPage = this.currPage + 1;
-      let obj = {
+      this.currPage += 1;
+      const obj = {
         pagesize: this.pagesize,
         currPage: this.currPage,
         tagIndex: this.tagIndex
       };
+      console.log("postList", obj);
       this.getListPostHasPaging(obj);
     }
   }

@@ -24,12 +24,10 @@ export default {
   // Nếu như lần load đầu tiên -> Không có chạy
   watch: {
     $route(to, from) {
-      console.log("homepage to", to);
       const tagIndex = to.query.tagIndex;
       if (tagIndex) {
         //dispatch  action by category
-        console.log(tagIndex);
-        this.getPostDetailById({ tagIndex: tagIndex });
+        this.getListPostHasPaging({ tagIndex: tagIndex });
       } else {
         // dispatch action by  pagin
         this.getListPostHasPaging({});
@@ -41,7 +39,7 @@ export default {
     this.getListPostHasPaging({ tagIndex });
   },
   methods: {
-    ...mapActions(["getListPostHasPaging", "getPostDetailById"])
+    ...mapActions(["getListPostHasPaging"])
   }
 };
 </script>
