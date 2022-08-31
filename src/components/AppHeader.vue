@@ -21,20 +21,14 @@
         >
 
         <!-- If Already Login -->
-        <div v-else-if="currentUser" class="wrapper-user">
-          <router-link
-            v-bind:to="{
-              name: 'user-page',
-              params: { id: currentUser.USERID }
-            }"
-            class="user-header"
-          >
+        <div v-else class="wrapper-user">
+          <a class="user-header">
             <span class="avatar">
-              <img v-bind:src="getAvatar" alt="avatar" />
+              <img alt="avatar" :src="getAvatar" />
             </span>
-            <span class="email">{{ currentUser.email }}</span>
-          </router-link>
-          <div v-on:click="handleLogout" class="logout">Logout</div>
+            <span class="email">{{ currentUser && currentUser.email }}</span>
+          </a>
+          <div @click="handleLogout" class="logout">Logout</div>
         </div>
       </div>
     </div>
@@ -72,19 +66,18 @@ export default {
   computed: {
     ...mapGetters(["isLogin", "currentUser"]),
     getAvatar() {
-      if (this.currentUser.profilepicture)
+      if (this.currentUser && this.currentUser.profilepicture) {
         return this.currentUser.profilepicture;
-      return "/dist/images/default-avatar.png";
+      }
+      return "https://i.pravatar.cc/300";
     }
   },
   methods: {
     ...mapActions(["logout"]),
     handleLogout() {
-      var check = confirm("Bạn có thực sự muốn đăng xuất?");
+      const check = confirm("Bạn có thực sự muốn đăng xuất ?");
       if (check) {
-        this.logout().then(res => {
-          this.$router.push("/login");
-        });
+        this.logout().then(res => this.$router.push("/"));
       }
     }
   }

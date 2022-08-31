@@ -58,6 +58,8 @@ export default {
           } else {
             alert(res.error.join(" "));
           }
+        } else {
+          this.$router.push("/");
         }
         console.log("response", res);
       });

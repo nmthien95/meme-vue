@@ -19,6 +19,7 @@ export default {
           data: result.data.user
         };
       }
+      return { ok: false, error: null };
     } catch (error) {
       return {
         ok: false,
@@ -26,14 +27,22 @@ export default {
       };
     }
   },
-  async login({ commit }, { email = "", password = "" }) {
+  async login({ commit, dispatch }, { email = "", password = "" }) {
     commit("SET_LOADING", true);
     try {
       let data = { email, password };
-      const result = await axiosInstance.get("/member/login.php", data);
+      const result = await axiosInstance.post("/member/login.php", data);
+
       commit("SET_LOADING", false);
       console.log("loginResult", result);
       if (result.data.status === 200) {
+        // const resultUserPost = await dispatch(
+        //   "getListPostsByUserId",
+        //   result.data.user.USERID
+        // );
+
+        commit("SET_USER_INFO", result.data.user);
+        commit("SET_LOGIN_INFO", result.data);
         return {
           ok: true,
           error: null,
@@ -54,56 +63,77 @@ export default {
         error: error.message
       };
     }
+  },
+  async logout({ commit }) {
+    commit("SET_LOGOUT");
+    return null;
+  },
+  async checkLogin({ commit, dispatch }) {
+    try {
+      const tokenLocal = localStorage.getItem("ACCESS_TOKEN");
+      const userObj = parseJwt(tokenLocal);
+      console.log("userObj: ", userObj.id);
+      if (userObj) {
+        // hai api trên chạy riêng lẻ dùng pomise  all
+        const pomiseUser = dispatch("getUserbyId", userObj.id);
+        const promisePostUser = dispatch("getListPostsByUserId", userObj.id);
+        const [resultUser, resulPostUser] = await Promise.all([
+          pomiseUser,
+          promisePostUser
+        ]);
+
+        if (resultUser.ok && resulPostUser.ok) {
+          const data = { user: resultUser.data, token: tokenLocal };
+          commit("SET_LOGIN_INFO", data);
+          return { ok: true, error: null };
+        }
+      }
+      return { ok: false, error: null };
+    } catch (error) {
+      return {
+        ok: false,
+        eroor: error.message
+      };
+    }
+  },
+
+  async getListPostsByUserId({ commit }, userid) {
+    try {
+      const configs = {
+        params: {
+          userid
+        },
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + localStorage.getItem("ACCESS_TOKEN")
+        }
+      };
+      const result = await axiosInstance.get(
+        "/post/getListPostUserID.php",
+        configs
+      );
+      if (result.data.status === 200) {
+        const objData = {
+          posts: result.data.posts,
+          userid
+        };
+        commit("SET_USER_POST", objData);
+        return {
+          ok: true,
+          error: null
+        };
+      }
+      return {
+        ok: false,
+        error: null
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        eroor: error.message
+      };
+    }
   }
-  //   async logout({ commit }) {
-  //     commit("SET_LOGOUT");
-  //     return null;
-  //   }
-  //   async checkLogin({ commit, dispatch }) {
-  //     try {
-  //       let tokenLocal = localStorage.getItem(CONFIG_ACCESS_TOKEN);
-  //       let userObj = parseJwt(tokenLocal);
-
-  //       if (userObj) {
-  //         // let resultUser      = await dispatch('getUserById', userObj.id);
-  //         // let resultPostUser  = await dispatch('getListPostsByUserId', userObj.id);
-  //         let promiseUser = dispatch("getUserById", userObj.id);
-  //         let promisePostUser = dispatch("getListPostsByUserId", userObj.id);
-
-  //         let [resultUser, resultPostUser] = await Promise.all([
-  //           promiseUser,
-  //           promisePostUser
-  //         ]);
-
-  //         // Dòng 73 chạy 3s
-  //         // Dòng 74 chạy 4s
-  //         // Tổng lại chúng ta phải chờ 7s
-  //         // Hai API trên chạy riêng lẽ được hay không?
-
-  //         // Nếu 2 API trên chạy đồng thời -> tổng thời gian chờ chỉ là 4s thôi
-
-  //         if (resultUser.ok && resultPostUser.ok) {
-  //           let data = {
-  //             user: resultUser.data,
-  //             token: tokenLocal
-  //           };
-  //           commit("SET_LOGIN_INFO", data);
-  //           return {
-  //             ok: true,
-  //             error: null
-  //           };
-  //         }
-  //       }
-  //       return {
-  //         ok: false
-  //       };
-  //     } catch (error) {
-  //       return {
-  //         ok: false,
-  //         error: error.message
-  //       };
-  //     }
-  //   },
   //   async getListPostsByUserId({ commit }, userid) {
   //     try {
   //       let config = {
