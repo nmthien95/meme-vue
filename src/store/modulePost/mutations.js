@@ -11,16 +11,11 @@ export default {
     state.listPosts = [...state.listPosts, ...data];
   },
   SET_POST_DETAIL(state, data) {
-    console.log(data);
     state.postDetail = data;
-  }
+  },
 
-  // SET_POST_DETAIL(state, data) {
-  //   console.log("set_post_detail", data);
-  //   state.postDetail = data;
-  // },
-  // PUST_LIST_COMMENTS(state, comment) {
-  //   console.log("PUSH_LIST_COMMENTS = ", comment);
-  //   state.postDetail.comments.push(comment);
-  // }
+  PUST_LIST_COMMENTS(state, comment) {
+    console.log("PUSH_LIST_COMMENTS = ", comment);
+    state.postDetail.comments.push(comment);
+  }
 };

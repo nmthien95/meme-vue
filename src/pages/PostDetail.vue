@@ -1,12 +1,9 @@
 <template>
   <div class="row">
     <div class="col-lg-8">
-      <div
-        class="ass1-section__list"
-        v-if="getDataPostDetail && getDataPostDetail.post"
-      >
+      <div class="ass1-section__list" v-if="getDataPostDetail">
         <div class="ass1-section">
-          <post-item :post="getDataPostDetail.post" />
+          <post-item :post="getDataPostDetail && getDataPostDetail.post" />
 
           <!-- <post-feeling /> -->
           <!-- <post-feeling1 /> -->
@@ -21,7 +18,7 @@
 
         <post-comment-add />
 
-        <post-comments />
+        <post-comments :comments="getDataPostDetail.comments" />
       </div>
     </div>
     <div class="col-lg-4">

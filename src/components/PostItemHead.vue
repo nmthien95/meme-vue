@@ -1,13 +1,15 @@
 <template>
   <div class="ass1-section__head">
     <router-link :to="getUserLink" class="ass1-section__avatar ass1-avatar"
-      ><img :src="getAvatar" :alt="post.fullname"
+      ><img :src="getAvatar" alt=""
     /></router-link>
 
     <div>
-      <router-link :to="getUserLink" class="ass1-section__name">{{
-        post.fullname
-      }}</router-link>
+      <router-link
+        :to="getUserLink"
+        class="ass1-section__name"
+        v-html="formatFullname"
+      ></router-link>
       <span class="ass1-section__passed">{{ formatTimeAdded }}</span>
     </div>
     <router-link :to="getUserLink" class="ass1-section__link ass1-btn-icon"
@@ -18,13 +20,21 @@
 
 <script>
 import moment from "moment";
+import { replaceAll } from "../helpers";
 export default {
   name: "post-item-head",
   props: {
     post: Object
   },
   data() {
-    return {};
+    return {
+      querySearch: this.$route.query.query
+    };
+  },
+  watch: {
+    $route(to, from) {
+      this.querySearch = to.query.query;
+    }
   },
 
   computed: {
@@ -40,6 +50,18 @@ export default {
     formatTimeAdded() {
       moment.locale("vi");
       return moment(this.post.time_added).fromNow();
+    },
+    formatFullname() {
+      if (this.querySearch) {
+        // repalce html
+        return replaceAll(
+          this.post.fullname,
+          this.querySearch,
+          `<mark>${this.querySearch}</mark>`
+        );
+      } else {
+        return this.post.fullname;
+      }
     }
   }
 };

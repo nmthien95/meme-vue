@@ -1,14 +1,13 @@
 <template>
-  <div class="ass1-comments__section">
+  <div class="ass1-comments__section" v-if="comment">
     <a href="#" class="ass1-comments__avatar ass1-avatar"
-      ><img src="images/avatar-02.png" alt=""
+      ><img :src="renderAvatar" alt=""
     /></a>
     <div class="ass1-comments__content">
-      <a href="#" class="ass1-comments__name">Tây Tạng</a>
-      <span class="ass1-comments__passed">12 giờ trước</span>
+      <a href="#" class="ass1-comments__name">{{ comment.fullname }}</a>
+      <span class="ass1-comments__passed">{{ formatTimeCmt }} </span>
       <p>
-        Scratch off globe, for when you want to wipe out any country that
-        displeases you but lack the weaponry to do so.
+        {{ comment.comment }}
       </p>
       <div class="ass1-comments__info">
         <a href="#" class="ass1-comments__btn-upvote ass1-btn-icon"
@@ -23,10 +22,23 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   name: "post-comment-item",
-  props: {},
-  computed: {}
+  props: { comment: Object },
+  computed: {
+    renderAvatar() {
+      if (this.comment && this.comment.profilepicture) {
+        return this.comment.profilepicture;
+      }
+      return "https://i.pravatar.cc/300";
+    },
+    formatTimeCmt() {
+      moment.locale("vi");
+      return moment(this.comment.time_added).fromNow();
+    }
+  }
 };
 </script>
 

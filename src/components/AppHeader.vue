@@ -22,12 +22,18 @@
 
         <!-- If Already Login -->
         <div v-else class="wrapper-user">
-          <a class="user-header">
+          <router-link
+            :to="{
+              name: 'user-page',
+              params: { id: currentUser ? currentUser.USERID : '' }
+            }"
+            class="user-header"
+          >
             <span class="avatar">
               <img alt="avatar" :src="getAvatar" />
             </span>
             <span class="email">{{ currentUser && currentUser.email }}</span>
-          </a>
+          </router-link>
           <div @click="handleLogout" class="logout">Logout</div>
         </div>
       </div>
@@ -40,7 +46,7 @@ import $ from "jquery";
 import AppHeaderSearch from "./AppHeaderSearch";
 import AppNavigation from "./AppNavigation";
 
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "app-header",
@@ -73,11 +79,15 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["SET_LOGOUT"]),
     ...mapActions(["logout"]),
     handleLogout() {
       const check = confirm("Bạn có thực sự muốn đăng xuất ?");
+      console.log(check);
       if (check) {
-        this.logout().then(res => this.$router.push("/"));
+        this.SET_LOGOUT();
+        this.$router.push("/");
+        // this.logout().then(res => this.$router.push("/"));
       }
     }
   }

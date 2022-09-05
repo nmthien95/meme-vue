@@ -24,26 +24,26 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: Login
-    // beforeEnter: ifNotAuthenticated
+    component: Login,
+    beforeEnter: ifNotAuthenticated
   },
   {
     path: "/register",
     name: "register",
-    component: Register
-    // beforeEnter: ifNotAuthenticated
+    component: Register,
+    beforeEnter: ifNotAuthenticated
   },
   {
     path: "/user/:id",
     name: "user-page",
-    component: UserPage
-    // beforeEnter: ifAuthenticated
+    component: UserPage,
+    beforeEnter: ifAuthenticated
   },
   {
     path: "/user/:id/profile",
     name: "user-profile",
-    component: UserProfile
-    // beforeEnter: ifAuthenticated
+    component: UserProfile,
+    beforeEnter: ifAuthenticated
   },
   {
     path: "/user/:id/password",
@@ -53,13 +53,14 @@ const routes = [
   {
     path: "/post-detail/:id",
     name: "post-detail",
-    component: PostDetail
+    component: PostDetail,
+    beforeEnter: ifAuthenticated
   },
   {
     path: "/upload",
     name: "upload",
-    component: PostUpload
-    // beforeEnter: ifAuthenticated
+    component: PostUpload,
+    beforeEnter: ifAuthenticated
   },
   {
     path: "/search",

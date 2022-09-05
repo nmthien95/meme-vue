@@ -1,8 +1,7 @@
 <template>
   <div class="ass1-section__content">
-    <p>{{ post.post_content }}</p>
-    <!-- <p v-if="!querySearch">{{ formatPostContent }}</p>
-    <p v-else v-html="formatPostContent"></p> -->
+    <p v-html="formatPostContent"></p>
+
     <div class="ass1-section__image">
       <router-link :to="getPostLink">
         <img :src="post.url_image" :alt="post.post_content" />

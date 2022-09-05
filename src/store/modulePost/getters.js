@@ -3,17 +3,22 @@ export default {
     return state.listPosts;
   },
   getDataPostDetail(state, getters, rootState) {
-    const USERID = state.postDetail.post.USERID;
-    const user = rootState.user.users[USERID];
+    let data = null;
+    if (state.postDetail && rootState.user) {
+      const USERID = state.postDetail.post.USERID;
+      const user = rootState.user.users[USERID];
+      const post = state.postDetail.post;
 
-    const data = {
-      post: {
-        ...state.postDetail.post,
-        fullname: user.fullname,
-        profilepicture: user.profilepicture
-      },
-      categories: state.postDetail.categories
-    };
+      data = {
+        post: {
+          ...post,
+          fullname: user.fullname,
+          profilepicture: user.profilepicture
+        },
+        categories: state.postDetail.categories,
+        comments: state.postDetail.comments
+      };
+    }
 
     return data;
   }
